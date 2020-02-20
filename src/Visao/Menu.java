@@ -69,7 +69,9 @@ public class Menu extends JPanel {
 		return btnJogar;
 	}
 
-	public JButton getBtnMultiPlayer() {
+	
+
+	public JButton getPontuacao() {
 		return Pontuacao;
 	}
 

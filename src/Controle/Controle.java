@@ -4,18 +4,22 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
+import javax.swing.table.DefaultTableModel;
 
 import Modelo.Audio;
 import Modelo.Fase;
+import Modelo.Jogador;
 import Modelo.Sprite;
 import Visao.Ajuda;
 import Visao.Camera;
 import Visao.Game;
 import Visao.Janela;
 import Visao.Menu;
+import Visao.Rank;
 import Visao.TelaJogador;
 
 public class Controle implements Runnable, KeyListener, ActionListener {
@@ -24,6 +28,7 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 	Fase fase;
 	Ajuda ajuda;
 	Game game;
+	Rank rank;
 	TelaJogador telaJogador;
 	Menu menu;
 	Sprite personagem;
@@ -33,8 +38,9 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 	static HashMap<Integer, Boolean> keyPool;
 	boolean ativo;
 	boolean respondendo = false;
-
-	public Controle(Janela janela, Fase fase, Menu menu, Ajuda ajuda, Game game, TelaJogador telaJogaador) {
+	private  ArrayList<Jogador> jogadores = new ArrayList<Jogador>();
+	
+	public Controle(Janela janela, Fase fase, Menu menu, Ajuda ajuda, Game game, TelaJogador telaJogaador, Rank rank) {
 
 		this.janela = janela;
 		this.fase = fase;
@@ -42,6 +48,7 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		this.ajuda = ajuda;
 		this.game = game;
 		this.telaJogador = telaJogaador;
+		this.rank = rank;
 
 		personagem = fase.getBomber();
 
@@ -58,6 +65,7 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		janela.add(ajuda);
 		janela.add(game);
 		janela.add(telaJogaador);
+		janela.add(rank);
 
 		controleEventos();
 
@@ -80,6 +88,8 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		menu.getBtnJogar().addActionListener(this);
 		menu.getBtnSair().addActionListener(this);
 		menu.getBtnAjuda().addActionListener(this);
+		menu.getPontuacao().addActionListener(this);
+		rank.getBtnVoltar().addActionListener(this);
 		ajuda.getVoltar().addActionListener(this);
 		telaJogador.getBtnOk().addActionListener(this);
 		telaJogador.getBtnVoltar().addActionListener(this);
@@ -106,6 +116,16 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		}
 		if (e.getSource() == telaJogador.getBtnVoltar()) {
 			trocarTelas(telaJogador, menu);
+		}
+		if (e.getSource() == rank.getBtnVoltar()) {
+			trocarTelas(rank, menu);
+		}
+		if (e.getSource() == menu.getPontuacao()) {
+
+			
+			//rank.editarCampos(jogadores);
+
+			trocarTelas(menu, rank);
 		}
 		if (e.getSource() == telaJogador.getBtnOk()) {
 			inicializar();
