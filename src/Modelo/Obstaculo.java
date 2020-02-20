@@ -1,8 +1,8 @@
 package Modelo;
 
-
 import java.awt.Image;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -10,22 +10,24 @@ import javax.swing.ImageIcon;
 
 public class Obstaculo {
 
-	 private Image imagem;
+	private Image imagem;
 	private ImageIcon referencia;
-		private int x, y;
+	private int x, y;
 	private boolean isVisivel;
-	
-	public Obstaculo(int x,int y) {
+	private int largura, altura;
+
+	public Obstaculo(int x, int y) {
 		this.x = x;
 		this.y = y;
-		
+
 		referencia = new ImageIcon(getClass().getClassLoader().getResource("barra.png"));
 
 		imagem = referencia.getImage();
+		this.largura = imagem.getWidth(null);
+		this.altura = imagem.getHeight(null);
 
-	
 		isVisivel = true;
-		
+
 	}
 
 	public Image getImagem() {
@@ -44,6 +46,8 @@ public class Obstaculo {
 		return isVisivel;
 	}
 
-
+	public Rectangle getBounds() {
+		return new Rectangle(x, y,largura, altura);
+	}
 
 }

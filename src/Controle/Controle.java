@@ -5,6 +5,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
+
+import javax.swing.JPanel;
+
 import Modelo.Audio;
 import Modelo.Fase;
 import Modelo.Sprite;
@@ -13,6 +16,7 @@ import Visao.Camera;
 import Visao.Game;
 import Visao.Janela;
 import Visao.Menu;
+import Visao.TelaJogador;
 
 public class Controle implements Runnable, KeyListener, ActionListener {
 
@@ -20,26 +24,28 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 	Fase fase;
 	Ajuda ajuda;
 	Game game;
+	TelaJogador telaJogador;
 	Menu menu;
-	Sprite bomber1;
+	Sprite personagem;
 	Audio audio;
 	MovimentoP1 eventos1;
 	Camera camera;
 	static HashMap<Integer, Boolean> keyPool;
 	boolean ativo;
+	boolean respondendo = false;
 
-
-	public Controle(Janela janela, Fase fase, Menu menu, Ajuda ajuda, Game game) {
+	public Controle(Janela janela, Fase fase, Menu menu, Ajuda ajuda, Game game, TelaJogador telaJogaador) {
 
 		this.janela = janela;
 		this.fase = fase;
 		this.menu = menu;
 		this.ajuda = ajuda;
 		this.game = game;
+		this.telaJogador = telaJogaador;
 
-		bomber1 = fase.getBomber();
+		personagem = fase.getBomber();
 
-		eventos1 = new MovimentoP1(bomber1);
+		eventos1 = new MovimentoP1(personagem);
 
 		camera = fase.getCamera();
 
@@ -51,8 +57,7 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		janela.add(menu);
 		janela.add(ajuda);
 		janela.add(game);
-		
-		
+		janela.add(telaJogaador);
 
 		controleEventos();
 
@@ -61,11 +66,10 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 
 	public void inicializar() {
 
-		janela.setSize(780, 558);
-		 fase.setVisible(true);
-		menu.setVisible(false);
-		
-		game.setVisible(true);
+		telaJogador.setVisible(false);
+		fase.setVisible(true);
+		fase.requestFocus();
+		// game.setVisible(true);
 
 	}
 
@@ -77,6 +81,8 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		menu.getBtnSair().addActionListener(this);
 		menu.getBtnAjuda().addActionListener(this);
 		ajuda.getVoltar().addActionListener(this);
+		telaJogador.getBtnOk().addActionListener(this);
+		telaJogador.getBtnVoltar().addActionListener(this);
 
 	}
 
@@ -84,26 +90,35 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 
 		if (e.getSource() == menu.getBtnJogar()) {
 
-			inicializar();
+			menu.setVisible(false);
+			telaJogador.setVisible(true);
 		}
 		if (e.getSource() == menu.getBtnSair()) {
 			System.exit(0);
 		}
 		if (e.getSource() == menu.getBtnAjuda()) {
-			menu.setVisible(false);
-			ajuda.setVisible(true);
+
+			trocarTelas(menu, ajuda);
 		}
 		if (e.getSource() == ajuda.getVoltar()) {
-			menu.setVisible(true);
-			ajuda.setVisible(false);
+
+			trocarTelas(ajuda, menu);
+		}
+		if (e.getSource() == telaJogador.getBtnVoltar()) {
+			trocarTelas(telaJogador, menu);
+		}
+		if (e.getSource() == telaJogador.getBtnOk()) {
+			inicializar();
+
 		}
 	}
 
 	public void run() {
 		ativo = true;
 		while (ativo) {
-			Atualizar();
+
 			try {
+				runControleDoJogo();
 				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -111,13 +126,16 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		}
 	}
 
-	private void Atualizar() {
-
-		runControleDoJogo();
-
-	}
-
 	private void runControleDoJogo() {
+
+		if (personagem.colisaoBloco(Fase.getObstaculos(), 0, 0) && respondendo == false) {
+			fase.setVisible(false);
+			fase.setLocation(1000, 0);
+			game.setVisible(true);
+			game.requestFocus();
+
+		}
+		;
 
 	}
 
@@ -147,6 +165,13 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		fase.setLocation(1000, 0);
 		menu.setVisible(true);
 		menu.requestFocus();
+
+	}
+
+	public void trocarTelas(JPanel a, JPanel b) {
+
+		a.setVisible(false);
+		b.setVisible(true);
 
 	}
 

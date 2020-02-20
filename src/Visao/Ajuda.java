@@ -20,9 +20,6 @@ public class Ajuda extends JPanel {
 		setPreferredSize(new Dimension(Largura, Altura));
 		setLayout(null);
 
-		
-		
-
 		lblInstrues = new JLabel("INSTRU\u00C7\u00D5ES");
 		lblInstrues.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		lblInstrues.setForeground(Color.BLUE);

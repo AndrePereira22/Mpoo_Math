@@ -45,20 +45,38 @@ public class Sprite extends Thread {
 		return false;
 
 	}
+	public boolean colisaoBloco(ArrayList<Obstaculo> tmp, int x,int y) {
+		Rectangle personagem=new Rectangle(getX()+x, getY()+y, getLargura(), getAltura());
+		for (Obstaculo rectangle : tmp) {
+			
+			Rectangle formaBloco =rectangle.getBounds();
+			
+			if(formaBloco.intersects(personagem) && rectangle.isVisivel()){
+				return true;
+			}		
+		}
+		return false;
+	}
 	
 	
 	public void setX(int posX) {
 		
-		if(!colisao(Fase.getRetangulosColisao(),posX-this.x,0)) {
+		
+		if(!colisao(Fase.getRetangulosColisao(),posX-this.x,0) && 
+				!colisaoBloco(Fase.getObstaculos(),posX-this.x,0)) {
 			this.x=posX;
 		}
+		
+
 	}
 
 	public void setY(int posY) {
 		
-		if(!colisao(Fase.getRetangulosColisao(),0,posY-this.y) ) {
+		if(!colisao(Fase.getRetangulosColisao(),posY-this.y,0) && 
+				!colisaoBloco(Fase.getObstaculos(),posY-this.y,0)) {
 			this.y=posY;
 		}
+		
 	}
 	
 	public int getX() {

@@ -13,7 +13,7 @@ public class Fase extends Jogo {
 	private static ArrayList<Rectangle> retangulosColisao;
 	private Camera camera;
 	private Sprite aluno;
-	private ArrayList<Obstaculo> obstaculos;
+	private static ArrayList<Obstaculo> obstaculos;
 
 	public Fase() {
 		super();
@@ -74,6 +74,10 @@ public class Fase extends Jogo {
 
 	public Camera getCamera() {
 		return camera;
+	}
+
+	public static ArrayList<Obstaculo> getObstaculos() {
+		return obstaculos;
 	}
 
 }
