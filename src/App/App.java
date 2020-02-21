@@ -16,13 +16,13 @@ public class App {
 
 	public static void main(String[] args) {
 
-		Janela janela = new Janela(780, 558);
+		Janela janela = new Janela(largura, altura);
 		Fase fase = new Fase();
-		Ajuda ajuda = new Ajuda(780, 558);
-		Game game = new Game(780, 558);
-		TelaJogador telaJogaador = new TelaJogador(780, 558);
-		Menu menu = new Menu(780, 558);
-		Rank rank = new Rank(780,558);
+		Ajuda ajuda = new Ajuda(largura, altura);
+		Game game = new Game(largura, altura);
+		TelaJogador telaJogaador = new TelaJogador(largura, altura);
+		Menu menu = new Menu(largura, altura);
+		Rank rank = new Rank(largura,altura);
 
 		Controle control = new Controle(janela, fase, menu, ajuda, game, telaJogaador,rank);
 		control.run();

@@ -37,15 +37,17 @@ public class Fase extends Jogo {
 		retangulosColisao = mapaColisao.montarColi();
 
 		try {
-			aluno = new Sprite("sprite.png", 1, 4, 4, 50, 45);
+			aluno = new Sprite("sprite1.png", 1, 4, 4, 50, 45);
 		} catch (IOException e) {
 
 			e.printStackTrace();
 		}
 
+		int p=100;
 		for (int i = 0; i < 4; i++) {
 
-			obstaculos.add(new Obstaculo( 200, 200));
+			obstaculos.add(new Obstaculo( p, 200,i));
+			p+=200;
 
 		}
 		

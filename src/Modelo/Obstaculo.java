@@ -15,12 +15,13 @@ public class Obstaculo {
 	private int x, y;
 	private boolean isVisivel;
 	private int largura, altura;
+	private String  url[] = {"adicao.png","subtra.png","divisao.png","multiplicacao.png"};
 
-	public Obstaculo(int x, int y) {
+	public Obstaculo(int x, int y,int i) {
 		this.x = x;
 		this.y = y;
 
-		referencia = new ImageIcon(getClass().getClassLoader().getResource("barra.png"));
+		referencia = new ImageIcon(getClass().getClassLoader().getResource(url[i]));
 
 		imagem = referencia.getImage();
 		this.largura = imagem.getWidth(null);
