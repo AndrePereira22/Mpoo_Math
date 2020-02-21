@@ -6,6 +6,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
@@ -38,8 +39,10 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 	static HashMap<Integer, Boolean> keyPool;
 	boolean ativo;
 	boolean respondendo = false;
-	private  ArrayList<Jogador> jogadores = new ArrayList<Jogador>();
-	
+	private ArrayList<Jogador> jogadores = new ArrayList<Jogador>();
+	private Random sorteio;
+	private int superior, inferior, resposta, aux;
+
 	public Controle(Janela janela, Fase fase, Menu menu, Ajuda ajuda, Game game, TelaJogador telaJogaador, Rank rank) {
 
 		this.janela = janela;
@@ -60,6 +63,8 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 
 		audio = new Audio();
 
+		sorteio = new Random();
+
 		janela.add(fase);
 		janela.add(menu);
 		janela.add(ajuda);
@@ -77,7 +82,6 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		telaJogador.setVisible(false);
 		fase.setVisible(true);
 		fase.requestFocus();
-		// game.setVisible(true);
 
 	}
 
@@ -93,10 +97,38 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		ajuda.getVoltar().addActionListener(this);
 		telaJogador.getBtnOk().addActionListener(this);
 		telaJogador.getBtnVoltar().addActionListener(this);
+		game.getPassar().addActionListener(this);
+
+		for (int i = 0; i < 4; i++) {
+			game.getBotoes()[i].addActionListener(this);
+		}
 
 	}
 
 	public void actionPerformed(ActionEvent e) {
+
+		for (int contador = 0; contador < 4; contador++) {
+			if (e.getSource() == game.getBotoes()[contador]) {
+
+				int escolha = Integer.parseInt(game.getBotoes()[contador].getText());
+
+				if (escolha == resposta) {
+					System.out.println("acertou");
+					audio.getAcerto().play();
+				} else {
+					System.out.println("errou");
+					audio.getErro().play();
+				}
+
+				try {
+					Thread.sleep(1000);
+					sortearOperação();
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+
+			}
+		}
 
 		if (e.getSource() == menu.getBtnJogar()) {
 
@@ -122,13 +154,16 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		}
 		if (e.getSource() == menu.getPontuacao()) {
 
-			
-			//rank.editarCampos(jogadores);
+			// rank.editarCampos(jogadores);
 
 			trocarTelas(menu, rank);
 		}
 		if (e.getSource() == telaJogador.getBtnOk()) {
 			inicializar();
+
+		}
+		if (e.getSource() == game.getPassar()) {
+			sortearOperação();
 
 		}
 	}
@@ -153,6 +188,10 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 			fase.setLocation(1000, 0);
 			game.setVisible(true);
 			game.requestFocus();
+
+			sortearOperação();
+
+			respondendo = true;
 
 		}
 		;
@@ -192,6 +231,29 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 
 		a.setVisible(false);
 		b.setVisible(true);
+
+	}
+
+	public void sortearOperação() {
+		superior = sorteio.nextInt(100);
+		inferior = sorteio.nextInt(100);
+
+		resposta = superior + inferior;
+
+		game.getSuperior().setText(superior + "");
+		game.getInferior().setText(inferior + "");
+
+		for (int i = 0; i < 4; i++) {
+
+			aux = sorteio.nextInt(100);
+
+			game.getBotoes()[i].setText(aux + "");
+
+		}
+
+		aux = sorteio.nextInt(3);
+
+		game.getBotoes()[aux].setText(resposta + "");
 
 	}
 

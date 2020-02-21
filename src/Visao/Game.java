@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JButton;
@@ -14,10 +15,12 @@ import javax.swing.JMenuItem;
 public class Game extends JPanel {
 
 	private JLabel operador, superior, inferior, plano;
-	private JButton resposta1, resposta2, resposta3, resposta4, passar, voltar;
+	private JButton passar;
 	JMenuBar menuBar;
 	JMenuItem VoltarMenu, sair;
 	JMenu mnMenu;
+	private JButton botoes[] = new JButton[4];
+	private int posicao[] = { 130, 275, 420, 565 };
 
 	public Game(int Largura, int Altura) {
 
@@ -39,33 +42,24 @@ public class Game extends JPanel {
 		inferior.setBounds(240, 120, 76, 26);
 		add(inferior);
 
-		resposta1 = new JButton("200");
-		resposta1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		resposta1.setBounds(140, 329, 65, 36);
-		add(resposta1);
+		for (int i = 0; i < 4; i++) {
 
-		resposta2 = new JButton("200");
-		resposta2.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		resposta2.setBounds(285, 329, 65, 36);
-		add(resposta2);
+			this.botoes[i] = new JButton();
+			botoes[i].setFont(new Font("Tahoma", Font.PLAIN, 18));
+			botoes[i].setBounds(posicao[i], 329, 80, 36);
+			botoes[i].setContentAreaFilled(false);
+			botoes[i].setBackground(Color.BLUE);
 
-		resposta3 = new JButton("200");
-		resposta3.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		resposta3.setBounds(430, 329, 65, 36);
-		add(resposta3);
+			add(botoes[i]);
+		}
 
-		resposta4 = new JButton("200");
-		resposta4.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		resposta4.setBounds(575, 329, 65, 36);
-		add(resposta4);
-
-		passar = new JButton("+");
-		passar.setBounds(573, 195, 41, 36);
+		passar = new JButton();
+		passar.setBounds(583, 197, 81, 30);
+		passar.setIcon(new ImageIcon(getClass().getClassLoader().getResource("next.png")));
+		passar.setContentAreaFilled(false);
+		passar.setRolloverIcon(new ImageIcon(getClass().getClassLoader().getResource("next.png")));
 		add(passar);
 
-		voltar = new JButton("-");
-		voltar.setBounds(634, 195, 41, 36);
-		add(voltar);
 
 		menuBar = new JMenuBar();
 		menuBar.setBounds(0, 0, 97, 21);
@@ -101,29 +95,10 @@ public class Game extends JPanel {
 		return inferior;
 	}
 
-	public JButton getResposta1() {
-		return resposta1;
-	}
-
-	public JButton getResposta2() {
-		return resposta2;
-	}
-
-	public JButton getResposta3() {
-		return resposta3;
-	}
-
-	public JButton getResposta4() {
-		return resposta4;
-	}
-
 	public JButton getPassar() {
 		return passar;
 	}
 
-	public JButton getVoltar() {
-		return voltar;
-	}
 
 	public JMenuBar getMenuBar() {
 		return menuBar;
@@ -139,6 +114,10 @@ public class Game extends JPanel {
 
 	public JMenu getMnMenu() {
 		return mnMenu;
+	}
+
+	public JButton[] getBotoes() {
+		return botoes;
 	}
 
 }

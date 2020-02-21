@@ -11,6 +11,8 @@ import Visao.Rank;
 import Visao.TelaJogador;
 
 public class App {
+	
+	private final static int largura=780,altura=558;
 
 	public static void main(String[] args) {
 
