@@ -5,16 +5,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
 import javax.swing.JPanel;
-import javax.swing.table.DefaultTableModel;
 
 import Modelo.Audio;
 import Modelo.Fase;
-import Modelo.Jogador;
+import Modelo.SalvarDadosXml;
 import Modelo.Sprite;
+import Modelo.Usuario;
 import Visao.Ajuda;
 import Visao.Camera;
 import Visao.Game;
@@ -23,7 +24,7 @@ import Visao.Menu;
 import Visao.Rank;
 import Visao.TelaJogador;
 
-public class Controle implements Runnable, KeyListener, ActionListener {
+public class Controle extends Thread implements KeyListener, ActionListener {
 
 	Janela janela;
 	Fase fase;
@@ -34,30 +35,22 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 	Menu menu;
 	Sprite personagem;
 	Audio audio;
-	MovimentoP1 eventos1;
+	Movimento eventos1;
 	Camera camera;
 	static HashMap<Integer, Boolean> keyPool;
 	boolean ativo;
 	boolean respondendo = false;
-	private ArrayList<Jogador> jogadores = new ArrayList<Jogador>();
 	private Random sorteio;
 	private int superior, inferior, resposta, aux;
 
-	public Controle(Janela janela, Fase fase, Menu menu, Ajuda ajuda, Game game, TelaJogador telaJogaador, Rank rank) {
+	public Controle(Janela janela, Menu menu, Ajuda ajuda, Game game, TelaJogador telaJogaador, Rank rank) {
 
 		this.janela = janela;
-		this.fase = fase;
 		this.menu = menu;
 		this.ajuda = ajuda;
 		this.game = game;
 		this.telaJogador = telaJogaador;
 		this.rank = rank;
-
-		personagem = fase.getBomber();
-
-		eventos1 = new MovimentoP1(personagem);
-
-		camera = fase.getCamera();
 
 		keyPool = new HashMap<Integer, Boolean>();
 
@@ -65,7 +58,6 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 
 		sorteio = new Random();
 
-		janela.add(fase);
 		janela.add(menu);
 		janela.add(ajuda);
 		janela.add(game);
@@ -79,16 +71,28 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 
 	public void inicializar() {
 
+		if (telaJogador.getRdbtnAndre().isSelected()) {
+			this.fase = new Fase("sprite.png");
+		} else {
+			this.fase = new Fase("sprite1.png");
+		}
+
+		janela.add(fase);
+		personagem = fase.getBomber();
+		eventos1 = new Movimento(personagem);
+		camera = fase.getCamera();
 		telaJogador.setVisible(false);
 		fase.setVisible(true);
 		fase.requestFocus();
+		fase.addKeyListener(eventos1);
+		fase.addKeyListener(this);
+
+		start();
 
 	}
 
 	public void controleEventos() {
 
-		fase.addKeyListener(eventos1);
-		fase.addKeyListener(this);
 		menu.getBtnJogar().addActionListener(this);
 		menu.getBtnSair().addActionListener(this);
 		menu.getBtnAjuda().addActionListener(this);
@@ -113,10 +117,8 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 				int escolha = Integer.parseInt(game.getBotoes()[contador].getText());
 
 				if (escolha == resposta) {
-					System.out.println("acertou");
 					audio.getAcerto().play();
 				} else {
-					System.out.println("errou");
 					audio.getErro().play();
 				}
 
@@ -131,9 +133,8 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		}
 
 		if (e.getSource() == menu.getBtnJogar()) {
+			trocarTelas(menu, telaJogador);
 
-			menu.setVisible(false);
-			telaJogador.setVisible(true);
 		}
 		if (e.getSource() == menu.getBtnSair()) {
 			System.exit(0);
@@ -154,11 +155,15 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		}
 		if (e.getSource() == menu.getPontuacao()) {
 
-			// rank.editarCampos(jogadores);
+			if (SalvarDadosXml.listar() != null) {
+				ArrayList<Usuario> u = SalvarDadosXml.listar();
+				rank.listar(u);
+			}
 
 			trocarTelas(menu, rank);
 		}
 		if (e.getSource() == telaJogador.getBtnOk()) {
+
 			inicializar();
 
 		}
@@ -173,7 +178,9 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 		while (ativo) {
 
 			try {
-				runControleDoJogo();
+				if (fase.isVisible()) {
+					runControleDoJogo();
+				}
 				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -193,8 +200,7 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 
 			respondendo = true;
 
-		}
-		;
+		};
 
 	}
 
@@ -235,17 +241,49 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 	}
 
 	public void sortearOperação() {
-		superior = sorteio.nextInt(100);
-		inferior = sorteio.nextInt(100);
 
-		resposta = superior + inferior;
+		if (personagem.getOperacao() == 0) {
+			superior = sorteio.nextInt(100);
+			inferior = sorteio.nextInt(100);
+			resposta = superior + inferior;
+
+		} else if (personagem.getOperacao() == 1) {
+			superior = sorteio.nextInt(100);
+			inferior = sorteio.nextInt(100);
+			resposta = superior - inferior;
+			game.getOperador().setText("-");
+
+		} else if (personagem.getOperacao() == 2) {
+			superior = sorteio.nextInt(100);
+			inferior = sorteio.nextInt(100);
+
+			try {
+				while (superior % inferior != 0) {
+					superior = sorteio.nextInt(100);
+					inferior = sorteio.nextInt(100);
+				}
+				resposta = superior / inferior;
+				game.getOperador().setText("%");
+			} catch (java.lang.ArithmeticException e) {
+			}
+
+		} else if (personagem.getOperacao() == 3) {
+			superior = sorteio.nextInt(100);
+			inferior = sorteio.nextInt(100);
+			resposta = superior * inferior;
+			game.getOperador().setText("X");
+		}
 
 		game.getSuperior().setText(superior + "");
 		game.getInferior().setText(inferior + "");
 
 		for (int i = 0; i < 4; i++) {
 
-			aux = sorteio.nextInt(100);
+			aux = sorteio.nextInt((resposta + 10) - (resposta - 10) + 1) + resposta - 10;
+
+			if (resposta < 0) {
+				aux = aux * (-1);
+			}
 
 			game.getBotoes()[i].setText(aux + "");
 
@@ -255,6 +293,27 @@ public class Controle implements Runnable, KeyListener, ActionListener {
 
 		game.getBotoes()[aux].setText(resposta + "");
 
+	}
+
+	public void separarRanking(){
+		try{
+			ArrayList<Usuario> jogadores = SalvarDadosXml.listar();
+
+			 Collections.sort(jogadores);
+
+		}catch(Exception ex){}
+
+	}
+	public void salvarXML() {
+		if(SalvarDadosXml.listar()!=null) {
+			ArrayList<Usuario> u = SalvarDadosXml.listar();
+			u.add(new Usuario("andre","20"));
+			SalvarDadosXml.gravarXML(u);
+		}else {
+			ArrayList<Usuario> users = new ArrayList<Usuario>();
+			users.add(new Usuario("25","carlos"));
+			SalvarDadosXml.gravarXML(users);
+		}
 	}
 
 }

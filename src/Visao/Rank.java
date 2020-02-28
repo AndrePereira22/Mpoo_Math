@@ -15,7 +15,8 @@ import java.awt.Color;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
 
-import Modelo.Jogador;
+import Modelo.Usuario;
+
 public class Rank extends JPanel {
 	private JTable tabela;
 	private JScrollPane scrow;
@@ -43,33 +44,40 @@ public class Rank extends JPanel {
 		tabela.setBackground(Color.LIGHT_GRAY);
 		tabela.setBounds(144, 90, 281, 288);
 
-
 		add(tabela);
 
 		JLabel fundo = new JLabel("");
 		fundo.setIcon(new ImageIcon(getClass().getClassLoader().getResource("imm.png")));
 		fundo.setBounds(0, 0, Largura, Altura);
 		add(fundo);
+		setVisible(false);
 
 	}
 
-	public void editarCampos(ArrayList<Jogador> users) {
+	public void listar(ArrayList<Usuario> lista) {
+
+		int i = 0;
 		try {
-			tabela.setModel(
-					new DefaultTableModel(new Object[][] { 
-						    { "1", users.get(0).getNome(), users.get(0).getPontucao() },
-							{ "2", users.get(1).getNome(), users.get(1).getPontucao() },
-							{ "3", users.get(2).getNome(), users.get(2).getPontucao() },
-							{ "4", users.get(3).getNome(), users.get(3).getPontucao() },
-							{ "5", users.get(4).getNome(), users.get(4).getPontucao() },
-						
+			String[] colunas = new String[] {"", "NOME", "PONTUAÇÃO" };
+			Object[][] dados = new Object[lista.size()][3];
+			for (Usuario a : lista) {
+				dados[i][0] = i+1+"";
+				dados[i][1] = a.getNome();
+				dados[i][2] = a.getPontuacao() + "";
 
-					}, new String[] { "", "Nome", "Pontuacao" }));
-			tabela.getColumnModel().getColumn(0).setPreferredWidth(3);
-		} catch (NullPointerException e) {
+				i++;
+			}
+			DefaultTableModel dataModel = new DefaultTableModel(dados, colunas) {
+				@Override
+				public boolean isCellEditable(int row, int column) {
+					return false;
+				}
+			};
+			tabela.setModel(dataModel);
+		} catch (Exception ex) {
 
-		} catch (IndexOutOfBoundsException x) {
 		}
+
 	}
 
 	public JTable getTabela() {

@@ -16,7 +16,7 @@ public class Obstaculo {
 	private boolean isVisivel;
 	private int largura, altura;
 	private String  url[] = {"adicao.png","subtra.png","divisao.png","multiplicacao.png"};
-
+	private int posicao;
 	public Obstaculo(int x, int y,int i) {
 		this.x = x;
 		this.y = y;
@@ -26,6 +26,7 @@ public class Obstaculo {
 		imagem = referencia.getImage();
 		this.largura = imagem.getWidth(null);
 		this.altura = imagem.getHeight(null);
+		this.posicao=i;
 
 		isVisivel = true;
 
@@ -49,6 +50,10 @@ public class Obstaculo {
 
 	public Rectangle getBounds() {
 		return new Rectangle(x, y,largura, altura);
+	}
+
+	public int getPosicao() {
+		return posicao;
 	}
 
 }

@@ -29,10 +29,10 @@ public abstract class Jogo extends JPanel implements Runnable {
 		setPreferredSize(new Dimension(LARGURA,ALTURA));
 		setFocusable(true);
 		requestFocus();
-		Load();
+	
 	}
 	
-	public abstract void Load();
+	
 	
 	 public void terminate() {
 		 

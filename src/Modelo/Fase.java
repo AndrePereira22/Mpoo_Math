@@ -1,5 +1,7 @@
+
 package Modelo;
 
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,20 +16,15 @@ public class Fase extends Jogo {
 	private Camera camera;
 	private Sprite aluno;
 	private static ArrayList<Obstaculo> obstaculos;
+	private ArrayList<Point> pontos;
 
-	public Fase() {
+	public Fase(String url) {
 		super();
 		setFocusable(true);
 		setDoubleBuffered(true);
 
-		Load();
-
-	}
-
-	public void Load() {
-
 		obstaculos = new ArrayList<Obstaculo>();
-		 
+
 		mapa1 = new Mapa("tileset.png", "cenario.txt");
 		mapa2 = new Mapa("tileset.png", "cenario2.txt");
 		mapaColisao = new Mapa("tileset.png", "cenario2.txt");
@@ -37,22 +34,18 @@ public class Fase extends Jogo {
 		retangulosColisao = mapaColisao.montarColi();
 
 		try {
-			aluno = new Sprite("sprite1.png", 1, 4, 4, 50, 45);
+			aluno = new Sprite(url, 1, 4, 4, 50, 39);
 		} catch (IOException e) {
 
 			e.printStackTrace();
 		}
 
-		int p=100;
-		for (int i = 0; i < 4; i++) {
+		pontos = new ArrayList<Point>();
 
-			obstaculos.add(new Obstaculo( p, 200,i));
-			p+=200;
+		iniciarPontos();
 
-		}
-		
 		camera = new Camera(aluno, mapa1, mapa2, obstaculos);
-		
+
 		setVisible(false);
 	}
 
@@ -80,6 +73,20 @@ public class Fase extends Jogo {
 
 	public static ArrayList<Obstaculo> getObstaculos() {
 		return obstaculos;
+	}
+
+	public void iniciarPontos() {
+
+		pontos.add(new Point(46, 315));
+		pontos.add(new Point(414, 423));
+		pontos.add(new Point(362, 135));
+		pontos.add(new Point(730, 423));
+
+		for (int i = 0; i < 4; i++) {
+
+			obstaculos.add(new Obstaculo(pontos.get(i).x, pontos.get(i).y, i));
+
+		}
 	}
 
 }

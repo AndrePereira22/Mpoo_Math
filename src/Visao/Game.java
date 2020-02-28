@@ -29,7 +29,7 @@ public class Game extends JPanel {
 
 		operador = new JLabel("+");
 		operador.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		operador.setBounds(200, 120, 46, 14);
+		operador.setBounds(200, 120, 46, 28);
 		add(operador);
 
 		superior = new JLabel("100");
