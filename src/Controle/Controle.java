@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import Modelo.Audio;
@@ -26,22 +27,24 @@ import Visao.TelaJogador;
 
 public class Controle extends Thread implements KeyListener, ActionListener {
 
-	Janela janela;
-	Fase fase;
-	Ajuda ajuda;
-	Game game;
-	Rank rank;
-	TelaJogador telaJogador;
-	Menu menu;
-	Sprite personagem;
-	Audio audio;
-	Movimento eventos1;
-	Camera camera;
+	private Janela janela;
+	private Fase fase;
+	private Ajuda ajuda;
+	private Game game;
+	private Rank rank;
+	private TelaJogador telaJogador;
+	private Menu menu;
+	private Sprite personagem;
+	private Audio audio;
+	private Movimento eventos1;
+	private Camera camera;
 	static HashMap<Integer, Boolean> keyPool;
 	boolean ativo;
-	boolean respondendo = false;
+	boolean respondendo = false, tempo = false;
 	private Random sorteio;
 	private int superior, inferior, resposta, aux;
+	private int contador = 0, pontuacao = 0;
+	private Usuario usuario;
 
 	public Controle(Janela janela, Menu menu, Ajuda ajuda, Game game, TelaJogador telaJogaador, Rank rank) {
 
@@ -57,6 +60,8 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 		audio = new Audio();
 
 		sorteio = new Random();
+
+		usuario = new Usuario("Vanessa","0");
 
 		janela.add(menu);
 		janela.add(ajuda);
@@ -117,6 +122,14 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 				int escolha = Integer.parseInt(game.getBotoes()[contador].getText());
 
 				if (escolha == resposta) {
+
+					if (game.getBarra().getValue() <= 17) {
+						game.getBarra().setValue(game.getBarra().getValue() + 3);
+						pontuacao = pontuacao + 1;
+					} else {
+						game.getBarra().setValue(20);
+					}
+
 					audio.getAcerto().play();
 				} else {
 					audio.getErro().play();
@@ -181,6 +194,29 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 				if (fase.isVisible()) {
 					runControleDoJogo();
 				}
+				if (game.isVisible() && respondendo) {
+
+					diminuirBarra();
+				}
+				if (game.getBarra().getValue() == 0 && respondendo) {
+					respondendo = false;
+
+					salvarXML();
+					JOptionPane.showMessageDialog(null, "game over");
+
+				}
+
+				if (pontuacao == 2 && respondendo) {
+					game.setVisible(false);
+					respondendo = false;
+					Fase.getObstaculos().get(contador).setVisivel(false);
+					fase.setVisible(true);
+					fase.requestFocus();
+					contador++;
+					game.getBarra().setValue(20);
+					pontuacao = 0;
+				}
+
 				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -199,8 +235,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 			sortearOperação();
 
 			respondendo = true;
-
-		};
+		}
 
 	}
 
@@ -268,8 +303,8 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 			}
 
 		} else if (personagem.getOperacao() == 3) {
-			superior = sorteio.nextInt(100);
-			inferior = sorteio.nextInt(100);
+			superior = sorteio.nextInt(10);
+			inferior = sorteio.nextInt(10);
 			resposta = superior * inferior;
 			game.getOperador().setText("X");
 		}
@@ -295,23 +330,36 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 
 	}
 
-	public void separarRanking(){
-		try{
+	public void diminuirBarra() {
+		try {
+			sleep(1000);
+			game.getBarra().setValue(game.getBarra().getValue() - 1);
+
+		} catch (Exception e) {
+		}
+	}
+
+	public void separarRanking() {
+		try {
 			ArrayList<Usuario> jogadores = SalvarDadosXml.listar();
 
-			 Collections.sort(jogadores);
+			Collections.sort(jogadores);
 
-		}catch(Exception ex){}
+		} catch (Exception ex) {
+		}
 
 	}
+
 	public void salvarXML() {
-		if(SalvarDadosXml.listar()!=null) {
+		if (SalvarDadosXml.listar() != null) {
 			ArrayList<Usuario> u = SalvarDadosXml.listar();
-			u.add(new Usuario("andre","20"));
+			usuario.setPontuacao("" + pontuacao);
+			u.add(usuario);
 			SalvarDadosXml.gravarXML(u);
-		}else {
+		} else {
 			ArrayList<Usuario> users = new ArrayList<Usuario>();
-			users.add(new Usuario("25","carlos"));
+			usuario.setPontuacao("" + pontuacao);
+			users.add(usuario);
 			SalvarDadosXml.gravarXML(users);
 		}
 	}

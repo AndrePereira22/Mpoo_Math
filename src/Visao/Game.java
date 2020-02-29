@@ -1,6 +1,7 @@
 package Visao;
 
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JLabel;
 import javax.swing.ImageIcon;
 
@@ -16,16 +17,22 @@ public class Game extends JPanel {
 
 	private JLabel operador, superior, inferior, plano;
 	private JButton passar;
-	JMenuBar menuBar;
-	JMenuItem VoltarMenu, sair;
-	JMenu mnMenu;
+	private JMenuBar menuBar;
+	private JMenuItem VoltarMenu, sair;
+	private JMenu mnMenu;
 	private JButton botoes[] = new JButton[4];
 	private int posicao[] = { 130, 275, 420, 565 };
+	private JProgressBar barra;
 
 	public Game(int Largura, int Altura) {
 
 		setPreferredSize(new Dimension(Largura, Altura));
 		setLayout(null);
+		
+		barra = new JProgressBar(JProgressBar.HORIZONTAL, 0, 20);
+		barra.setBounds(710, 45,50, 400);
+		barra.setValue(20);
+		add(barra);
 
 		operador = new JLabel("+");
 		operador.setFont(new Font("Tahoma", Font.PLAIN, 28));
@@ -119,5 +126,10 @@ public class Game extends JPanel {
 	public JButton[] getBotoes() {
 		return botoes;
 	}
+
+	public JProgressBar getBarra() {
+		return barra;
+	}
+	
 
 }

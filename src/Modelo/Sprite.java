@@ -40,7 +40,7 @@ public class Sprite extends Thread {
 		Rectangle personagem = new Rectangle(getX() + x, getY() + y, getLargura(), getAltura());
 		for (Rectangle rectangle : tmp) {
 			if (rectangle.intersects(personagem)) {
-				System.out.println("bateu na parede");
+				//System.out.println("bateu na parede");
 				return true;
 			}
 		}
@@ -55,10 +55,13 @@ public class Sprite extends Thread {
 			Rectangle formaBloco = rectangle.getBounds();
 
 			if (formaBloco.intersects(personagem) && rectangle.isVisivel()) {
-				System.out.println("bateu no bloco");
+				//System.out.println("bateu no bloco");
 				operacao = rectangle.getPosicao();
 
-				return true;
+				if(rectangle.isVisivel()) {
+					return true;
+				}
+				
 			}
 		}
 

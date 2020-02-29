@@ -24,4 +24,13 @@ public class Usuario  implements Comparable<Usuario>  {
 		}
 		return valor;
 	}
+
+	public void setNome(String nome) {
+		this.nome = nome;
+	}
+
+	public void setPontuacao(String pontuacao) {
+		this.pontuacao = pontuacao;
+	}
+	
 }

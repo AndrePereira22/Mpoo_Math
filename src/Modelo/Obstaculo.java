@@ -56,4 +56,8 @@ public class Obstaculo {
 		return posicao;
 	}
 
+	public void setVisivel(boolean isVisivel) {
+		this.isVisivel = isVisivel;
+	}
+
 }

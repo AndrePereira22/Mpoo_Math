@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<list>
+  <usuario>
+    <nome>carlos</nome>
+    <pontuacao>54</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>andre</nome>
+    <pontuacao>20</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>maria</nome>
+    <pontuacao>10</pontuacao>
+  </usuario>
+</list>
