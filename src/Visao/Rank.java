@@ -22,6 +22,7 @@ public class Rank extends JPanel {
 	private JScrollPane scrow;
 	private JButton btnVoltar;
 
+
 	public Rank(int Largura, int Altura) {
 
 		setPreferredSize(new Dimension(Largura, Altura));
@@ -43,7 +44,8 @@ public class Rank extends JPanel {
 		tabela.setBorder(new LineBorder(Color.DARK_GRAY));
 		tabela.setBackground(Color.LIGHT_GRAY);
 		tabela.setBounds(144, 90, 281, 288);
-
+		tabela.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		
 		add(tabela);
 
 		JLabel fundo = new JLabel("");

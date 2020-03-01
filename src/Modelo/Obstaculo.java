@@ -15,7 +15,7 @@ public class Obstaculo {
 	private int x, y;
 	private boolean isVisivel;
 	private int largura, altura;
-	private String  url[] = {"adicao.png","subtra.png","divisao.png","multiplicacao.png"};
+	private String  url[] = {"adicao.png","subtra.png","divisao.png","multiplicacao.png","formula.png","fim.png"};
 	private int posicao;
 	public Obstaculo(int x, int y,int i) {
 		this.x = x;

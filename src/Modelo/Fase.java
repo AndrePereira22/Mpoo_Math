@@ -78,11 +78,15 @@ public class Fase extends Jogo {
 	public void iniciarPontos() {
 
 		pontos.add(new Point(46, 315));
-		pontos.add(new Point(414, 423));
-		pontos.add(new Point(362, 135));
-		pontos.add(new Point(730, 423));
+		pontos.add(new Point(414, 426));
+		pontos.add(new Point(410, 44));
+		pontos.add(new Point(722, 235));
+		pontos.add(new Point(858, 334));
+		pontos.add(new Point(874, 45));
+		
+		
 
-		for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 6; i++) {
 
 			obstaculos.add(new Obstaculo(pontos.get(i).x, pontos.get(i).y, i));
 

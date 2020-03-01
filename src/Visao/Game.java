@@ -23,6 +23,7 @@ public class Game extends JPanel {
 	private JButton botoes[] = new JButton[4];
 	private int posicao[] = { 130, 275, 420, 565 };
 	private JProgressBar barra;
+	private JLabel jogador, placar, pontos;
 
 	public Game(int Largura, int Altura) {
 
@@ -30,7 +31,7 @@ public class Game extends JPanel {
 		setLayout(null);
 		
 		barra = new JProgressBar(JProgressBar.HORIZONTAL, 0, 20);
-		barra.setBounds(710, 45,50, 400);
+		barra.setBounds(710, 125,50, 380);
 		barra.setValue(20);
 		add(barra);
 
@@ -59,6 +60,20 @@ public class Game extends JPanel {
 
 			add(botoes[i]);
 		}
+		
+	
+		jogador = new JLabel("JOGADOR");
+		jogador.setBounds(533, 37, 121, 60);
+		jogador.setIcon(new ImageIcon(getClass().getClassLoader().getResource("menina.png")));
+		add(jogador);
+		
+		placar = new JLabel("0");
+		placar .setBounds(637, 50, 81, 30);
+		add(placar );
+		
+		pontos = new JLabel("PONTOS!");
+		pontos.setBounds(653, 50, 81, 30);
+		add(pontos);
 
 		passar = new JButton();
 		passar.setBounds(583, 197, 81, 30);
@@ -129,6 +144,14 @@ public class Game extends JPanel {
 
 	public JProgressBar getBarra() {
 		return barra;
+	}
+
+	public JLabel getJogador() {
+		return jogador;
+	}
+
+	public JLabel getPlacar() {
+		return placar;
 	}
 	
 

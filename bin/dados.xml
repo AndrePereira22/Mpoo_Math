@@ -12,4 +12,64 @@
     <nome>maria</nome>
     <pontuacao>10</pontuacao>
   </usuario>
+  <usuario>
+    <nome>Vanessa</nome>
+    <pontuacao>1</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>Conde</nome>
+    <pontuacao>1</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>rafaela</nome>
+    <pontuacao>5</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>monica</nome>
+    <pontuacao>10</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>Carlita</nome>
+    <pontuacao>13</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>Carlita</nome>
+    <pontuacao>0</pontuacao>
+  </usuario>
+  <usuario>
+    <nome></nome>
+    <pontuacao>0</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>mileide</nome>
+    <pontuacao>0</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>MARIA MARLI</nome>
+    <pontuacao>0</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>Daniela</nome>
+    <pontuacao>2</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>andre</nome>
+    <pontuacao>19</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>andreia</nome>
+    <pontuacao>0</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>Vanessa</nome>
+    <pontuacao>18</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>yhallyh</nome>
+    <pontuacao>4</pontuacao>
+  </usuario>
+  <usuario>
+    <nome>virtginina</nome>
+    <pontuacao>19</pontuacao>
+  </usuario>
 </list>

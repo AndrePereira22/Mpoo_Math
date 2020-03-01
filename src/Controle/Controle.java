@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Random;
 
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -43,7 +44,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 	boolean respondendo = false, tempo = false;
 	private Random sorteio;
 	private int superior, inferior, resposta, aux;
-	private int contador = 0, pontuacao = 0;
+	private int contador = 0, pontuacao = 0, conquista = 5, placar=0;
 	private Usuario usuario;
 
 	public Controle(Janela janela, Menu menu, Ajuda ajuda, Game game, TelaJogador telaJogaador, Rank rank) {
@@ -61,7 +62,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 
 		sorteio = new Random();
 
-		usuario = new Usuario("Vanessa","0");
+		usuario = new Usuario("default", "0");
 
 		janela.add(menu);
 		janela.add(ajuda);
@@ -78,8 +79,11 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 
 		if (telaJogador.getRdbtnAndre().isSelected()) {
 			this.fase = new Fase("sprite.png");
+			game.getJogador().setIcon(new ImageIcon(getClass().getClassLoader().getResource("menino.png")));
 		} else {
 			this.fase = new Fase("sprite1.png");
+			game.getJogador().setIcon(new ImageIcon(getClass().getClassLoader().getResource("menina.png")));
+
 		}
 
 		janela.add(fase);
@@ -91,6 +95,8 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 		fase.requestFocus();
 		fase.addKeyListener(eventos1);
 		fase.addKeyListener(this);
+		usuario.setNome(telaJogador.getTextField().getText());
+		game.getJogador().setText(usuario.getNome());
 
 		start();
 
@@ -107,6 +113,8 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 		telaJogador.getBtnOk().addActionListener(this);
 		telaJogador.getBtnVoltar().addActionListener(this);
 		game.getPassar().addActionListener(this);
+		game.getVoltarMenu().addActionListener(this);
+		game.getSair().addActionListener(this);
 
 		for (int i = 0; i < 4; i++) {
 			game.getBotoes()[i].addActionListener(this);
@@ -122,10 +130,14 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 				int escolha = Integer.parseInt(game.getBotoes()[contador].getText());
 
 				if (escolha == resposta) {
-
+					
+					pontuacao = pontuacao + 1;
+					placar=placar+1;
+					game.getPlacar().setText(placar + "");
+					
 					if (game.getBarra().getValue() <= 17) {
 						game.getBarra().setValue(game.getBarra().getValue() + 3);
-						pontuacao = pontuacao + 1;
+					
 					} else {
 						game.getBarra().setValue(20);
 					}
@@ -184,6 +196,15 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 			sortearOperação();
 
 		}
+		if (e.getSource() == game.getVoltarMenu()) {
+			menu();
+			trocarTelas(game, menu);
+
+		}
+		if (e.getSource() == game.getSair()) {
+			System.exit(0);
+
+		}
 	}
 
 	public void run() {
@@ -206,7 +227,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 
 				}
 
-				if (pontuacao == 2 && respondendo) {
+				if (pontuacao == conquista && respondendo) {
 					game.setVisible(false);
 					respondendo = false;
 					Fase.getObstaculos().get(contador).setVisivel(false);
@@ -214,9 +235,9 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 					fase.requestFocus();
 					contador++;
 					game.getBarra().setValue(20);
-					pontuacao = 0;
+					pontuacao=0;
+					
 				}
-
 				Thread.sleep(15);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
@@ -265,6 +286,11 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 		fase.setLocation(1000, 0);
 		menu.setVisible(true);
 		menu.requestFocus();
+		contador = 0;
+		respondendo = false;
+		pontuacao = 0;
+		game.getPlacar().setText("0");
+		game.getBarra().setValue(20);
 
 	}
 
@@ -307,6 +333,10 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 			inferior = sorteio.nextInt(10);
 			resposta = superior * inferior;
 			game.getOperador().setText("X");
+		} else if (personagem.getOperacao() == 4) {
+
+		} else if (personagem.getOperacao() == 5) {
+
 		}
 
 		game.getSuperior().setText(superior + "");
@@ -353,12 +383,12 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 	public void salvarXML() {
 		if (SalvarDadosXml.listar() != null) {
 			ArrayList<Usuario> u = SalvarDadosXml.listar();
-			usuario.setPontuacao("" + pontuacao);
+			usuario.setPontuacao("" + placar);
 			u.add(usuario);
 			SalvarDadosXml.gravarXML(u);
 		} else {
 			ArrayList<Usuario> users = new ArrayList<Usuario>();
-			usuario.setPontuacao("" + pontuacao);
+			usuario.setPontuacao("" + placar);
 			users.add(usuario);
 			SalvarDadosXml.gravarXML(users);
 		}
