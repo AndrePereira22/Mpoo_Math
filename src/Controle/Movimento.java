@@ -1,3 +1,4 @@
+
 package Controle;
 
 import java.awt.event.KeyEvent;
@@ -13,6 +14,15 @@ public class Movimento extends Thread implements KeyListener {
 	int up, down, left, right;
 	static HashMap<Integer, Boolean> keyPool;
 	private int pulo = 4;
+	private boolean ativo = true;
+
+	public boolean isAtivo() {
+		return ativo;
+	}
+
+	public void setAtivo(boolean ativo) {
+		this.ativo = ativo;
+	}
 
 	public Movimento(Sprite player1) {
 		this.bomber = player1;
@@ -50,7 +60,7 @@ public class Movimento extends Thread implements KeyListener {
 	}
 
 	public void run() {
-		boolean ativo = true;
+		ativo = true;
 		while (ativo) {
 			mover1();
 

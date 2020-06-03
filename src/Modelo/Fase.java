@@ -64,7 +64,8 @@ public class Fase extends Jogo {
 		camera.draw(g);
 	}
 
-	public Sprite getBomber() {
+
+	public Sprite getAluno() {
 		return aluno;
 	}
 

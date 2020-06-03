@@ -37,7 +37,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 	private Menu menu;
 	private Sprite personagem;
 	private Audio audio;
-	private Movimento eventos1;
+	private Movimento movimento;
 	private Camera camera;
 	static HashMap<Integer, Boolean> keyPool;
 	boolean ativo;
@@ -87,16 +87,17 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 		}
 
 		janela.add(fase);
-		personagem = fase.getBomber();
-		eventos1 = new Movimento(personagem);
+		personagem = fase.getAluno();
+		movimento = new Movimento(personagem);
 		camera = fase.getCamera();
 		telaJogador.setVisible(false);
 		fase.setVisible(true);
 		fase.requestFocus();
-		fase.addKeyListener(eventos1);
+		fase.addKeyListener(movimento);
 		fase.addKeyListener(this);
 		usuario.setNome(telaJogador.getTextField().getText());
 		game.getJogador().setText(usuario.getNome());
+		audio.getMusica().loop();
 
 		start();
 
@@ -217,7 +218,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 		while (ativo) {
 
 			try {
-				if (fase.isVisible()) {
+				if (fase.isVisible()) { // se a fase tiver visivel controla o jogo
 					runControleDoJogo();
 				}
 				if (game.isVisible() && respondendo) {
@@ -233,14 +234,8 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 				}
 
 				if (pontuacao == conquista && respondendo) {
-					game.setVisible(false);
-					respondendo = false;
-					Fase.getObstaculos().get(contador).setVisivel(false);
-					fase.setVisible(true);
-					fase.requestFocus();
-					contador++;
-					game.getBarra().setValue(20);
-					pontuacao = 0;
+
+					voltarAoLab();
 
 				}
 				Thread.sleep(15);
@@ -253,6 +248,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 	private void runControleDoJogo() {
 
 		if (personagem.colisaoBloco(Fase.getObstaculos(), 0, 0) && respondendo == false) {
+		
 			fase.setVisible(false);
 			fase.setLocation(1000, 0);
 			game.setVisible(true);
@@ -342,7 +338,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 			System.out.println("funcionaou");
 			aux = sorteio.nextInt(1);
 			resposta = fase.getRespostas()[aux];
-			game.getSuperior().setText( "");
+			game.getSuperior().setText("");
 			game.getInferior().setText(fase.getFuncoes()[aux]);
 			game.getOperador().setText("");
 
@@ -356,7 +352,6 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 
 			aux = sorteio.nextInt((resposta + 10) - (resposta - 10) + 1) + resposta - 10;
 
-			
 			game.getBotoes()[i].setText(aux + "");
 
 		}
@@ -381,6 +376,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 		try {
 			sleep(1000);
 			game.getBarra().setValue(game.getBarra().getValue() - 1);
+			game.getTempo().setText("" + game.getBarra().getValue());
 
 		} catch (Exception e) {
 		}
@@ -395,6 +391,21 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 		} catch (Exception ex) {
 		}
 
+	}
+
+	public void voltarAoLab() {
+		game.setVisible(false);
+		respondendo = false;
+		Fase.getObstaculos().get(contador).setVisivel(false);
+
+		fase.setVisible(true);
+
+		fase.requestFocus();
+		personagem.setX(personagem.getX());
+
+		contador++;
+		game.getBarra().setValue(20);
+		pontuacao = 0;
 	}
 
 	public void salvarXML() {

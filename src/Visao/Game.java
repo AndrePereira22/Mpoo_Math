@@ -22,6 +22,7 @@ public class Game extends JPanel {
 	private JMenu mnMenu;
 	private JButton botoes[] = new JButton[4];
 	private int posicao[] = { 130, 275, 420, 565 };
+	private JLabel tempo;
 	private JProgressBar barra;
 	private JLabel jogador, placar, pontos;
 
@@ -49,6 +50,11 @@ public class Game extends JPanel {
 		inferior.setFont(new Font("Tahoma", Font.PLAIN, 28));
 		inferior.setBounds(240, 120, 76, 26);
 		add(inferior);
+		
+		tempo = new JLabel("20");
+		tempo.setFont(new Font("Tahoma", Font.PLAIN, 28));
+		tempo.setBounds(677, 100, 81, 30);
+		add(tempo);
 
 		for (int i = 0; i < 4; i++) {
 
@@ -152,6 +158,10 @@ public class Game extends JPanel {
 
 	public JLabel getPlacar() {
 		return placar;
+	}
+
+	public JLabel getTempo() {
+		return tempo;
 	}
 	
 

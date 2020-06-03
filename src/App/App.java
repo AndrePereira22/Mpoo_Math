@@ -23,11 +23,7 @@ public class App {
 		Menu menu = new Menu(largura, altura);
 		Rank rank = new Rank(largura, altura);
 		new Controle(janela, menu, ajuda, game, telaJogaador, rank);
-		
-		
-		
-		
-		new JButton();// bora se pegar:?
+	
 
 	}
 
