@@ -4,6 +4,7 @@ package Modelo;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import Visao.Camera;
 
@@ -17,6 +18,9 @@ public class Fase extends Jogo {
 	private Sprite aluno;
 	private static ArrayList<Obstaculo> obstaculos;
 	private ArrayList<Point> pontos;
+	private String[] funcoes = new String[] {"15-(3-2)+(7-4))", "2 x (5-8) + (7+2)"};
+	private int[] respostas = new int[] {17,3};
+
 
 	public Fase(String url) {
 		super();
@@ -45,6 +49,7 @@ public class Fase extends Jogo {
 		iniciarPontos();
 
 		camera = new Camera(aluno, mapa1, mapa2, obstaculos);
+		
 
 		setVisible(false);
 	}
@@ -91,6 +96,14 @@ public class Fase extends Jogo {
 			obstaculos.add(new Obstaculo(pontos.get(i).x, pontos.get(i).y, i));
 
 		}
+	}
+
+	public String[] getFuncoes() {
+		return funcoes;
+	}
+
+	public int[] getRespostas() {
+		return respostas;
 	}
 
 }

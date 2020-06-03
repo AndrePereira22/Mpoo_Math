@@ -44,7 +44,7 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 	boolean respondendo = false, tempo = false;
 	private Random sorteio;
 	private int superior, inferior, resposta, aux;
-	private int contador = 0, pontuacao = 0, conquista = 5, placar=0;
+	private int contador = 0, pontuacao = 0, conquista = 5, placar = 0;
 	private Usuario usuario;
 
 	public Controle(Janela janela, Menu menu, Ajuda ajuda, Game game, TelaJogador telaJogaador, Rank rank) {
@@ -123,35 +123,40 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		int escolha = 0;
 
 		for (int contador = 0; contador < 4; contador++) {
 			if (e.getSource() == game.getBotoes()[contador]) {
 
-				int escolha = Integer.parseInt(game.getBotoes()[contador].getText());
+				if (personagem.getOperacao() != 4) {
 
-				if (escolha == resposta) {
-					
-					pontuacao = pontuacao + 1;
-					placar=placar+1;
-					game.getPlacar().setText(placar + "");
-					
-					if (game.getBarra().getValue() <= 17) {
-						game.getBarra().setValue(game.getBarra().getValue() + 3);
-					
+					escolha = Integer.parseInt(game.getBotoes()[contador].getText());
+
+					if (escolha == resposta) {
+
+						pontuacao = pontuacao + 1;
+						placar = placar + 1;
+						game.getPlacar().setText(placar + "");
+
+						if (game.getBarra().getValue() <= 17) {
+							game.getBarra().setValue(game.getBarra().getValue() + 3);
+
+						} else {
+							game.getBarra().setValue(20);
+						}
+
+						audio.getAcerto().play();
 					} else {
-						game.getBarra().setValue(20);
+						audio.getErro().play();
 					}
 
-					audio.getAcerto().play();
-				} else {
-					audio.getErro().play();
-				}
+					try {
+						Thread.sleep(1000);
+						sortearOperação();
+					} catch (InterruptedException e1) {
+						e1.printStackTrace();
+					}
 
-				try {
-					Thread.sleep(1000);
-					sortearOperação();
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
 				}
 
 			}
@@ -235,8 +240,8 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 					fase.requestFocus();
 					contador++;
 					game.getBarra().setValue(20);
-					pontuacao=0;
-					
+					pontuacao = 0;
+
 				}
 				Thread.sleep(15);
 			} catch (InterruptedException e) {
@@ -334,9 +339,14 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 			resposta = superior * inferior;
 			game.getOperador().setText("X");
 		} else if (personagem.getOperacao() == 4) {
+			System.out.println("funcionaou");
+			aux = sorteio.nextInt(1);
+			resposta = fase.getRespostas()[aux];
+			game.getSuperior().setText( "");
+			game.getInferior().setText(fase.getFuncoes()[aux]);
+			game.getOperador().setText("");
 
 		} else if (personagem.getOperacao() == 5) {
-
 		}
 
 		game.getSuperior().setText(superior + "");
@@ -346,11 +356,18 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 
 			aux = sorteio.nextInt((resposta + 10) - (resposta - 10) + 1) + resposta - 10;
 
-			if (resposta < 0) {
-				aux = aux * (-1);
-			}
-
+			
 			game.getBotoes()[i].setText(aux + "");
+
+		}
+		for (int i = 0; i < 4; i++) {
+			int res = Integer.parseInt(game.getBotoes()[i].getText());
+
+			if (res == resposta) {
+				aux = sorteio.nextInt((resposta + 10) - (resposta - 10) + 1) + resposta - 10;
+				game.getBotoes()[i].setText(aux + "");
+
+			}
 
 		}
 
