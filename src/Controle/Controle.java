@@ -401,7 +401,6 @@ public class Controle extends Thread implements KeyListener, ActionListener {
 		fase.setVisible(true);
 
 		fase.requestFocus();
-		personagem.setX(personagem.getX());
 
 		contador++;
 		game.getBarra().setValue(20);
