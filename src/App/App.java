@@ -1,7 +1,5 @@
 package App;
 
-import javax.swing.JButton;
-
 import Controle.Controle;
 import Visao.Ajuda;
 import Visao.Game;
